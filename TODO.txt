@@ -1,0 +1,14 @@
+Date::setMonthDay
+Date::setHourMin
+    bővítés
+    from lang matrix
+    pl 2/12 4:15 12/5
+
+add throws to parseAdd  
+    if due didnt parse anything throw error
+
+API to ask which day if DayOfWeek is given by user
+
+external file with variables
+
+throw error if month/day name wasnt recognised
