@@ -7,9 +7,9 @@
 
 std::string getDir(){
     const char* homedir;
-    if ((homedir = getenv("HOME")) == NULL) {
-        homedir = getpwuid(getuid())->pw_dir;
-    }
+    if ((homedir = getenv("HOME")) == NULL) //linux /home/user
+        homedir = getenv("USERPROFILE");    //win   C:\Users\user
+
     std::string dir(homedir);
     dir += FILELOCATION;
     return dir;

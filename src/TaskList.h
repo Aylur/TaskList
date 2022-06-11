@@ -203,8 +203,12 @@ void TaskList::parseRem(std::vector<std::string> input){
 }
 
 void TaskList::parseInput(std::vector<std::string> input){
-    std::string cmd = input.at(0);
-    input.erase(input.begin());
+    std::string cmd;
+    if(!input.empty()){
+        cmd = input.at(0);
+        input.erase(input.begin());
+    }
+    else cmd = "";   
 
     if(cmd=="q" || cmd=="quit"  || cmd=="exit" ||
        cmd=="-q"|| cmd=="--quit"|| cmd=="--exit") exit(0); 
@@ -226,5 +230,5 @@ void TaskList::parseInput(std::vector<std::string> input){
     else if(cmd== "s"  || cmd==  "sort" ||
             cmd=="-s"  || cmd=="--sort"  ) sortTasks();
 
-    else errorsCaught.push_back(101); // "Unknown command, type \"h\" or \"help\" for command list\n"
+    else if(cmd != "") errorsCaught.push_back(101); // "Unknown command, type \"h\" or \"help\" for command list\n"
 }
