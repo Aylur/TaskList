@@ -138,7 +138,7 @@ void TaskList::parseMod(std::vector<std::string> input){
             toModIndex = std::stoi(input[0]);
             input.erase(input.begin());
             indexExists = true;
-            validIndex = toModIndex>1 && toModIndex<=tasks.size();
+            validIndex = toModIndex >= 1 && toModIndex<=tasks.size();
         }catch(const std::exception& e){
            errorsCaught.push_back(31); //missing index arg
         }
