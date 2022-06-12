@@ -4,13 +4,14 @@
 
 #define FILELOCATION "/Documents/todo.txt" //at ~/
 #define LINESEPARATOR ";"
+#define PRINTSERIAL true //print serial number before task description
 
 struct nameValue{
-    std::string name;
-    int value;
+    std::string str;
+    int integer;
 };
 
-std::vector<int> errorsCaught;
+std::vector<nameValue> errorsCaught;
 std::string lastInputLine = "";
 
 std::vector<nameValue> dayNameList = {

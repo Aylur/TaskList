@@ -55,10 +55,36 @@ bool Date::setDay(std::string str){
 }
 
 bool Date::setMonthDay(std::string str){
-    if(str.size() == 5){
+    if(str.size() == 3){ // -/- 0/2
+        if(str[1] == '/'){
+            int m = 0; int d = 0;
+            try{ m = stoi(str.substr(0,1)); }catch(std::invalid_argument const& ex){}
+            try{ d = stoi(str.substr(2,1)); }catch(std::invalid_argument const& ex){}
+            setMonth(m); setDay(d);
+            return true;
+        }
+    }
+
+    if(str.size() == 4){
+        if(str[1] == '/'){ // -/-- 0/23
+            int m = 0; int d = 0;
+            try{ m = stoi(str.substr(0,1)); }catch(std::invalid_argument const& ex){}
+            try{ d = stoi(str.substr(2,2)); }catch(std::invalid_argument const& ex){}
+            setMonth(m); setDay(d);
+            return true;
+        }
+        if(str[2] == '/'){ // --/- 01/3
+            int m = 0; int d = 0;
+            try{ m = stoi(str.substr(0,2)); }catch(std::invalid_argument const& ex){}
+            try{ d = stoi(str.substr(3,1)); }catch(std::invalid_argument const& ex){}
+            setMonth(m); setDay(d);
+            return true;
+        }
+    }
+
+    if(str.size() == 5){ // --/--
         if(str[2] == '/'){
             int m = 0; int d = 0;
-            //needs fix -1 through -9 gets parsed 
             try{ m = stoi(str.substr(0,2)); }catch(std::invalid_argument const& ex){}
             try{ d = stoi(str.substr(3,2)); }catch(std::invalid_argument const& ex){}
             setMonth(m); setDay(d);
@@ -69,10 +95,19 @@ bool Date::setMonthDay(std::string str){
 }
 
 bool Date::setHourMin(std::string str){
-    if(str.size() == 5){
+    if(str.size() == 4){ // -:--
+        if(str[1] == ':'){
+            int h = 0; int min = 0;
+            try{ h = stoi(str.substr(0,1)); }catch(std::invalid_argument const& ex){}
+            try{ min = stoi(str.substr(2,2)); }catch(std::invalid_argument const& ex){}
+            setHour(h); setMin(min);
+            return true;
+        }
+    }
+
+    if(str.size() == 5){ // --:--
         if(str[2] == ':'){
             int h = 0; int min = 0;
-            //needs fix -1 through -9 gets parsed 
             try{ h = stoi(str.substr(0,2)); }catch(std::invalid_argument const& ex){}
             try{ min = stoi(str.substr(3,2)); }catch(std::invalid_argument const& ex){}
             setHour(h); setMin(min);
@@ -155,26 +190,28 @@ void Date::fix(){
 }
 
 void Date::check(){
-    if(month < 0 || month > 12) throw 20;
-    if(minutes/60 > 24 || minutes%60 >= 60) throw 21;
+    if(month > 12) errorsCaught.push_back({"",20});
+    if(month < 0) errorsCaught.push_back({"",21});
+    if(minutes > 1439 || minutes < 0) errorsCaught.push_back({"",22});
+    if(day < 0) errorsCaught.push_back({"",23});
     if(day > 31){
         switch (month){
-        case 1:  throw 1;  break;
-        case 3:  throw 3;  break;
-        case 5:  throw 5;  break;
-        case 7:  throw 7;  break;
-        case 8:  throw 8;  break;
-        case 10: throw 10; break;
-        case 12: throw 12; break;
+        case 1:  errorsCaught.push_back({"",1});  break;
+        case 3:  errorsCaught.push_back({"",3});  break;
+        case 5:  errorsCaught.push_back({"",5});  break;
+        case 7:  errorsCaught.push_back({"",7});  break;
+        case 8:  errorsCaught.push_back({"",8});  break;
+        case 10: errorsCaught.push_back({"",10}); break;
+        case 12: errorsCaught.push_back({"",12}); break;
         }
     }
     if(day > 30){
         switch (month){
-        case 4:  throw 4;  break;
-        case 6:  throw 6;  break;
-        case 9:  throw 9;  break;
-        case 11: throw 11; break;
+        case 4:  errorsCaught.push_back({"",4});  break;
+        case 6:  errorsCaught.push_back({"",6});  break;
+        case 9:  errorsCaught.push_back({"",9});  break;
+        case 11: errorsCaught.push_back({"",11}); break;
         }
     }
-    if(day >29 && month==2) throw 2;
+    if(day >29 && month==2) errorsCaught.push_back({"",2});
 }

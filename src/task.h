@@ -74,7 +74,11 @@ Task Task::createFromInputLine(std::vector<std::string> &input, bool &month, boo
                 else if(date.setDay(input[0]))
                     {dateCounter += 1; day = true;}
 
-                else taskDesc += input[0] + " ";
+                // else taskDesc += input[0] + " ";
+                else{
+                    std::string errMsg = "Warning: " + input[0] + " couldn't be parsed as a Date!\n";
+                    errorsCaught.push_back({errMsg,0});
+                }
                 input.erase(input.begin());
             }
         }
@@ -83,10 +87,9 @@ Task Task::createFromInputLine(std::vector<std::string> &input, bool &month, boo
             input.erase(input.begin());
         }
     }
+    std::cout << date.month << " " << date.day << " " << date.minutes << std::endl;
     Task task(taskDesc, date);
-    try{task.date.check();}
-    catch(const int errCode)
-        {errorsCaught.push_back(errCode);}
+    task.date.check();
     task.date.fix();
     return task;
 }

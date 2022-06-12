@@ -113,8 +113,7 @@ void printCommandList(){
     std::cout<< "Command list:\n";
     std::cout<< "\tq || quit \t to quit       \n";
     std::cout<< "\th || help \t list commands \n";
-    std::cout<< "\ta || add  \t to add task   \t add [task] due [date]\n";
-    std::cout<< "\t\t[date] format: --/-- --:--\n";
+    std::cout<< "\ta || add  \t to add task   \t add [task description] due [date]\n";
     std::cout<< "\tr || rem  \t to remove task\t rem [index] || rem [task description]\n";
     std::cout<< "\tm || mod  \t modify task   \t mod [index] [task] due [date]\n";
     std::cout<< "\ts || sort \t sort tasks    \n";
@@ -124,22 +123,25 @@ std::string errMessage(int errCode){
     std::string err = "Warning: ";
 
     switch(errCode){
-        case  1: err += "January only has months 31 in it\n"; break;
-        case  2: err += "February only has months 29 in it\n"; break;
-        case  3: err += "March only has months 31 in it\n"; break;
-        case  4: err += "April only has months 30 in it\n"; break;
-        case  5: err += "May only has months 31 in it\n"; break;
-        case  6: err += "June only has months 30 in it\n"; break;
-        case  7: err += "July only has months 31 in it\n"; break;
-        case  8: err += "August only has months 31 in it\n"; break;
-        case  9: err += "September only has months 30 in it\n"; break;
-        case 10: err += "Oktober only has months 31 in it\n"; break;
-        case 11: err += "November only has months 30 in it\n"; break;
-        case 12: err += "December only has months 31 in it\n"; break;
+        case  0: err =  ""; break;
 
-        case 20: err += "There are only 12 months in a year\n"; break; // -1 through -9 gets parsed and this is thrown
-        case 21: err += "There are only 24 hours in a day\n"; break;
+        case  1: err += "January has only 31 days in it\n"; break;
+        case  2: err += "February has only 29 days in it\n"; break;
+        case  3: err += "March has only 31 days in it\n"; break;
+        case  4: err += "April has only 30 days in it\n"; break;
+        case  5: err += "May has only 31 days in it\n"; break;
+        case  6: err += "June has only 30 days in it\n"; break;
+        case  7: err += "July has only 31 days in it\n"; break;
+        case  8: err += "August has only 31 days in it\n"; break;
+        case  9: err += "September has only 30 days in it\n"; break;
+        case 10: err += "Oktober has only 31 days in it\n"; break;
+        case 11: err += "November has only 30 days in it\n"; break;
+        case 12: err += "December has only 31 days in it\n"; break;
 
+        case 20: err += "There are only 12 months in a year\n"; break;
+        case 21: err += "Negative months don't exist\n"; break;    
+        case 22: err += "There are only 24 hours in a day\n"; break;
+        case 23: err += "Negative days don't exist\n"; break;
 
 
         case 30: err += "Missing arguments\n"; break;
@@ -150,6 +152,8 @@ std::string errMessage(int errCode){
         case 35: err += "There are multiple matching tasks, please be more specific\n"; break;
         case 100: err = ""; printCommandList(); break;
         case 101: err += "Unknown command, type \"h\" or \"help\" for command list\n"; break;
+
+        case 404: err = ""; break;
     }
     return err;
 }
@@ -157,8 +161,10 @@ std::string errMessage(int errCode){
 void printErrorMessages(){
     if(!errorsCaught.empty())
         std::cout << lastInputLine;
+    
     for(int i=0; i<errorsCaught.size(); i++){
-        std::cout << errMessage(errorsCaught[i]);
+        std::cout << errorsCaught[i].str;
+        std::cout << errMessage(errorsCaught[i].integer);
     }
     errorsCaught.clear();
 }
@@ -166,32 +172,16 @@ void printErrorMessages(){
 //variables
 int getMonthValue(std::string str){
     for(int i=0; i<monthNameList.size(); i++){
-        if(equalStr(monthNameList[i].name, str))
-            return monthNameList[i].value;
+        if(equalStr(monthNameList[i].str, str))
+            return monthNameList[i].integer;
     }
     return 0;
 }
 
 int getDayValue(std::string str){
     for(int i=0; i<dayNameList.size(); i++){
-        if(equalStr(dayNameList[i].name, str))
-            return dayNameList[i].value;
+        if(equalStr(dayNameList[i].str, str))
+            return dayNameList[i].integer;
     }
     return 0;
 }
-
-// unused
-// std::string getDayName(int value){
-//     for(int i=0; i<dayNameList.size(); i++){
-//         if(dayNameList[i].value == value)
-//             return dayNameList[i].name;
-//     }
-//     return "MISSING DAYNAME";
-// }
-// std::string getMonthName(int value){
-//     for(int i=0; i<monthNameList.size(); i++){
-//         if(monthNameList[i].value == value)
-//             return monthNameList[i].name;
-//     }
-//     return "MONTH MISSING";
-// }

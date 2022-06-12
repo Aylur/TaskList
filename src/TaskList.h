@@ -40,7 +40,7 @@ void TaskList::modTask(int index, Task task, bool month, bool day, bool minutes)
 void TaskList::remTask(std::vector<int> indexes){
     for(int i=0; i<indexes.size(); i++){
         if(indexes[i] > tasks.size() || indexes[i] < 1)
-            errorsCaught.push_back(32); //index out of range;
+            errorsCaught.push_back({"",32}); //index out of range;
         else
             tasks[indexes[i]-1].empty();
     }
@@ -83,11 +83,11 @@ void TaskList::writeToFile(){
 }
 
 void TaskList::printTasks(){
-    std::cout << " Date Hour       Tasks\n\n"; 
+    std::cout << "DeadLine        Tasks\n\n"; 
     for(int i=0; i<tasks.size(); i++){
 
         std::string sep = "";
-        if(i < 10) sep += std::to_string(i+1)+".  ";
+        if(i < 9) sep += " " + std::to_string(i+1)+". ";
         else sep += std::to_string(i+1)+ ". ";
 
         std::cout << tasks[i].date.toString() << sep << tasks[i].taskDesc << std::endl;
@@ -104,8 +104,12 @@ void TaskList::sortTasks(){
         int i = 1;
         for(i=1; i<tasks.size(); i++){
             if(max.date.month < tasks.at(i).date.month){max=tasks.at(i);maxi=i;}
-            else if(max.date.day < tasks.at(i).date.day){max=tasks.at(i);maxi=i;}
-            else if(max.date.minutes < tasks.at(i).date.minutes){max=tasks.at(i);maxi=i;}
+            else if(max.date.month == tasks.at(i).date.month){
+                if(max.date.day < tasks.at(i).date.day){max=tasks.at(i);maxi=i;}
+                else if(max.date.day == tasks.at(i).date.day){
+                    if(max.date.minutes < tasks.at(i).date.minutes){max=tasks.at(i);maxi=i;}
+                }
+            }
         }
         sortedTasks.push_back(max);
         tasks.erase(tasks.begin()+maxi);
@@ -115,7 +119,7 @@ void TaskList::sortTasks(){
 }
 
 void TaskList::parseAdd(std::vector<std::string> input){
-    if(input.size() == 0) errorsCaught.push_back(30); //missing arguments
+    if(input.size() == 0) errorsCaught.push_back({"",30}); //missing arguments
 
     while(!input.empty()){
         if(input[0] == LINESEPARATOR) input.erase(input.begin());
@@ -128,7 +132,7 @@ void TaskList::parseAdd(std::vector<std::string> input){
 }
 
 void TaskList::parseMod(std::vector<std::string> input){
-    if(input.size() == 0) errorsCaught.push_back(30); //missing arguments
+    if(input.size() == 0) errorsCaught.push_back({"",30}); //missing arguments
 
     while(!input.empty()){
         if(input[0] == LINESEPARATOR) input.erase(input.begin());
@@ -140,7 +144,7 @@ void TaskList::parseMod(std::vector<std::string> input){
             indexExists = true;
             validIndex = toModIndex >= 1 && toModIndex<=tasks.size();
         }catch(const std::exception& e){
-           errorsCaught.push_back(31); //missing index arg
+           errorsCaught.push_back({"",31}); //missing index arg
         }
         
         if(validIndex){
@@ -149,7 +153,7 @@ void TaskList::parseMod(std::vector<std::string> input){
             modTask(toModIndex-1, task, month, day, minutes);
         }
         if(!validIndex && indexExists)
-            errorsCaught.push_back(32); //index out of range
+            errorsCaught.push_back({"",32}); //index out of range
 
         //clear input untill next separator
         if(!validIndex)
@@ -160,7 +164,7 @@ void TaskList::parseMod(std::vector<std::string> input){
 }
 
 void TaskList::parseRem(std::vector<std::string> input){
-    if(input.size() == 0) errorsCaught.push_back(30); //missing arguments
+    if(input.size() == 0) errorsCaught.push_back({"",30}); //missing arguments
 
     std::vector<int> indexesToDelete;
 
@@ -193,8 +197,8 @@ void TaskList::parseRem(std::vector<std::string> input){
                     { if(input[0] != LINESEPARATOR ) toFind += " "; }
             }
             index = findIndexByDesc(toFind);
-            if(index == 0) errorsCaught.push_back(34); //couldnt find this task;
-            if(index == -1)errorsCaught.push_back(35); //multiple matching tasks;
+            if(index == 0) errorsCaught.push_back({"",34}); //couldnt find this task;
+            if(index == -1)errorsCaught.push_back({"Warning: There are multiple matching tasks for \""+toFind+"\"!\n         Please be more specific!\n",0});
             if(index > 0) indexesToDelete.push_back(index);
         }
     }
@@ -214,7 +218,7 @@ void TaskList::parseInput(std::vector<std::string> input){
        cmd=="-q"|| cmd=="--quit"|| cmd=="--exit") exit(0); 
 
     else if(cmd== "h"  || cmd==  "help" ||
-            cmd=="-h"  || cmd=="--help"  ) errorsCaught.push_back(100); //printCommandList();
+            cmd=="-h"  || cmd=="--help"  ) errorsCaught.push_back({"",100}); //printCommandList();
 
     else if(cmd== "a"  || cmd==  "add"  ||
             cmd=="-a"  || cmd=="--add"   ) parseAdd(input);
@@ -230,5 +234,5 @@ void TaskList::parseInput(std::vector<std::string> input){
     else if(cmd== "s"  || cmd==  "sort" ||
             cmd=="-s"  || cmd=="--sort"  ) sortTasks();
 
-    else if(cmd != "") errorsCaught.push_back(101); // "Unknown command, type \"h\" or \"help\" for command list\n"
+    else if(cmd != "") errorsCaught.push_back({"",101}); // "Unknown command, type \"h\" or \"help\" for command list\n"
 }
