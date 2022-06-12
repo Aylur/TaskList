@@ -3,6 +3,13 @@
 #include <string>
 #include <iostream>
 
+void clearConsole(){
+    if(getenv("HOME") != NULL)
+        system("clear");
+    else
+        system("cls");
+}
+
 std::string getDir(){
     const char* homedir;
     if ((homedir = getenv("HOME")) == NULL) //linux /home/user

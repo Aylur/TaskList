@@ -4,7 +4,7 @@ TaskList list;
 
 void mainConsole(){
     while(true){
-        system("clear");
+        clearConsole();
         list.printTasks();
         list.writeToFile();
         printErrorMessages();
