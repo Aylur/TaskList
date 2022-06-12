@@ -13,13 +13,13 @@ You will need a c++ compiler.
 ### Installation
 
 1. Clone the repo and compile
-   ```sh
+```sh
 git clone https://github.com/Aylur/TaskList.git
 cd src
 g++ main.cpp -o todo
 ```
 2. Move the file into a directory which is included in you PATH
-   ```sh
+```sh
 mkdir -p ~/.local/bin
 mv todo ~/.local/bin
 ```
