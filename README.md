@@ -1,4 +1,5 @@
 # Task List
+
 This is a small CLI program to manage a todo.txt
 
 ## About The Project
@@ -8,40 +9,71 @@ I wrote this program so I can quickly write down tasks I have coming up. When I 
 ## Getting Started
 
 ### Prerequisites
+
 You will need a c++ compiler.
 
 ### Installation
 
-1. Clone the repo and compile
+0. Clone the repo from github
+
 ```sh
 git clone https://github.com/Aylur/TaskList.git
-cd src
-g++ main.cpp -o todo
+cd TaskList
 ```
+
+### Compile and install using gnu-make
+
+1. compile
+
+```sh
+make build
+```
+
+2. compile and install
+
+```sh
+make install
+```
+
+### Compile and install manually
+
+1. compile
+
+```sh
+g++ src/main.cpp -o todo
+```
+
 2. Move the file into a directory which is included in you PATH
+
 ```sh
 mkdir -p ~/.local/bin
 mv todo ~/.local/bin
 ```
 
 ## Usage
+
 You can pass commands for example like this without entering the program
+
 ```
 todo add example task due jul 12. ; another task -d 9:30
 todo rem example task ; another task
 ```
+
 You can list tasks without entering the program
+
 ```
 todo -l
 todo list
 ```
+
 Or enter the program and watch modifications as they happen
+
 ```
 todo
 ```
 
 ## Planned features
 
-- [ ] External config file
-- [ ] Notification system for coming deadlines
-- [ ] Shell like cursor movement
+-   [ ] External config file
+-   [ ] Notification system for coming deadlines
+-   [ ] Shell like cursor movement
