@@ -87,8 +87,10 @@ void TaskList::printTasks(){
     for(int i=0; i<tasks.size(); i++){
 
         std::string sep = "";
-        if(i < 9) sep += " " + std::to_string(i+1)+". ";
-        else sep += std::to_string(i+1)+ ". ";
+        if(PRINTSERIAL){
+            if(i < 9) sep += " " + std::to_string(i+1)+". ";
+            else sep += std::to_string(i+1)+ ". ";
+        }
 
         std::cout << tasks[i].date.toString() << sep << tasks[i].taskDesc << std::endl;
     }

@@ -27,17 +27,22 @@ mv todo ~/.local/bin
 ## Usage
 You can pass commands for example like this without entering the program
 ```
-todo add example task due jul 12. ; another task -d 9:30
-todo rem example task ; another task
+todo -a example task due jul 12.
+todo -r example task
 ```
 You can list tasks without entering the program
 ```
 todo -l
-todo list
 ```
 Or enter the program and watch modifications as they happen
 ```
 todo
+```
+You can pass multiple arguments separated by a string set in variables.h
+```
+Command: -a example -d 06/12 and another task -d 20:00
+Command: -r example and 1 and 4-6
+Command: -m 2 update -d dec and 3 another update
 ```
 
 ## Planned features

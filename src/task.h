@@ -87,7 +87,6 @@ Task Task::createFromInputLine(std::vector<std::string> &input, bool &month, boo
             input.erase(input.begin());
         }
     }
-    std::cout << date.month << " " << date.day << " " << date.minutes << std::endl;
     Task task(taskDesc, date);
     task.date.check();
     task.date.fix();

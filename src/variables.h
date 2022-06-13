@@ -3,7 +3,7 @@
 #include <vector>
 
 #define FILELOCATION "/Documents/todo.txt" //at ~/
-#define LINESEPARATOR ";"
+#define LINESEPARATOR "and"
 #define PRINTSERIAL true //print serial number before task description
 
 struct nameValue{
